@@ -170,7 +170,7 @@ prawie że automatycznie.</p>
         <a class='octothorpe' href='#section-11'>#</a>
       </div>
       <p>Tutaj mamy do czynienia z prawdziwą magią. Za każdym razem, gdy
-będziesz chciał wypisać (<code>print</code>) obiekt typu <code>Post</code> na ekranie
+będziesz chciał(a) wypisać (<code>print</code>) obiekt typu <code>Post</code> na ekranie
 zostanie on zaprezentowany używając jedynie jego tytułu.</p>
     </div>
     <div class='code'>
@@ -183,12 +183,37 @@ zostanie on zaprezentowany używając jedynie jego tytułu.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-12'>#</a>
       </div>
+      <p>Co robi powyższy kod? Czym jest model w django?</p>
+<ul>
+<li>model to definicja obiektu</li>
+<li>definiujemy obiekt za pomocą jego atrybutów.</li>
+<li>to tak jakby ktoś Ciebie spytał o to jak zdefiniwał(a)byś kota?</li>
+<li>
+<p>pewnie odpowiesz coś w style: "kot to zwierzę, które ma maksimum cztery łapy,
+  uszy i imię", czyli w django:</p>
+<p><pre><code>
+class Cat(models.Model):
+    name = models.CharField(max_length=200)
+    has_ears = models.BooleanField()
+    number_of_legs = models.IntegerField(default=4)
+</pre></code></p>
+</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
-
-</pre></div>
+      <div class="highlight"><pre></pre></div>
     </div>
   </div>
   <div class='clearall'></div>

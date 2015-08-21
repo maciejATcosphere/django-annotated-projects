@@ -53,8 +53,26 @@ class Post(models.Model):
     def __str__(self):
         """
         Tutaj mamy do czynienia z prawdziwą magią. Za każdym razem, gdy
-        będziesz chciał wypisać (`print`) obiekt typu `Post` na ekranie
+        będziesz chciał(a) wypisać (`print`) obiekt typu `Post` na ekranie
         zostanie on zaprezentowany używając jedynie jego tytułu.
 
         """
         return self.title
+
+"""
+Co robi powyższy kod? Czym jest model w django?
+
+- model to definicja obiektu
+- definiujemy obiekt za pomocą jego atrybutów.
+- to tak jakby ktoś Ciebie spytał o to jak zdefiniwał(a)byś kota?
+- pewnie odpowiesz coś w style: "kot to zwierzę, które ma maksimum cztery łapy,
+  uszy i imię", czyli w django:
+
+    <pre><code>
+    class Cat(models.Model):
+        name = models.CharField(max_length=200)
+        has_ears = models.BooleanField()
+        number_of_legs = models.IntegerField(default=4)
+    </pre></code>
+
+"""

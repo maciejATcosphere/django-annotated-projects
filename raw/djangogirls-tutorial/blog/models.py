@@ -58,6 +58,9 @@ class Post(models.Model):
 
         """
         return self.title
+        """
+        Zwracamy tytuł postu.
+        """
 
 """
 Co robi powyższy kod? Czym jest model w django?

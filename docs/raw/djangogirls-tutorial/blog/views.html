@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>views.py</title>
+  <link rel="stylesheet" href="../../../pycco.css">
+  <script async defer src="https://hypothes.is/embed.js"></script>
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>views.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <h1>Widoki</h1>
+<p>Widoki to miejsce w którym wszystko zostaje ostatcznie sklejone. To tutaj
+łączymy się z bazą danych, pobieramy nasz szablon i tworzymy kontekst w ramach,
+którego pokażemy naszym użytkownikom wymagane przez nich dane.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <p>Kolejny raz skorzystamy z całego szeregu funkcjonalności, które jest nam dana
+wraz z <code>django</code>. Jedną z grup, w której zgromadzona zostało cały szereg
+użytecznych funkcji, jest tzw grupa skrótów (<code>shortcuts</code>). Linia ta oznacza: "
+poproszę o dostęp do funkcjonalności: <code>render</code>, <code>get_object_or_404</code> oraz
+<code>redirect</code>, które znajdują się w grupie (module) <code>shortcuts</code> będącą częścią
+<code>django</code>"</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">redirect</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <p>django oprócz skrótów ma cały szereg przydatnych funkcji (ang. utilities lub
+w skrócie <code>utils</code>). Jedną z nich jest <code>timezone</code>, która pozwala nam na m.in.
+sprawdzenie aktulanej godziny.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">timezone</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <p>Nasi użytkownicu będę przesyłać nam prośby związane z <code>Post</code>-ami, w związku
+z czym model <code>Post</code> również musi zostać zaimportowany pliku widoków
+kontekstu.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Post</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <p>Będziemy wyświetlać listę <code>Post</code>-ów, pojedyncze <code>Post</code>-y oraz naturalnie
+pozwolimy naszym użytkownikom na tworzenie nowych <code>Post</code>-ów, w tym właśnie
+zadaniu pomoże nam <code>PostForm</code>.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">PostForm</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>Jeżeli odwrócisz kolejnoć słów w nazwie tego widoku (funkcji) oraz
+przetłumaczysz ją na język polski wówczas otrzymasz kolejno:</p>
+<ul>
+<li><code>post_list</code> -&gt; <code>list post</code> (po odwórceniu kolejności)</li>
+<li><code>list post</code> -&gt; <code>wylistuj post(y)</code> (po przetłumaczniu na polski :-) )</li>
+</ul>
+<p>I to właśnie robi ten widok: listuje posty.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">post_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <p>posty które wyświetlimy naszym użytkownikom muszą zostać pobrane
+z bazy danych. Jednak nie chcemy pokazać im wszystkich istniejących
+postów, ponieważ w naszej bazie danych mogą istnieć posty, dla
+których jest jeszcze o wiele za wcześnie na publikację. Instrukcja
+<code>published_date__lte=timezone.now()</code> powinna być interpretowana jako:
+"data publikacji (<code>published_date</code>) mniejsza równa (<code>__lte</code>) aktualnej
+dacie (<code>timezone.now()</code>)". Instrukcja <code>.order_by('published_date')</code>
+powinna być czytana jako: "posortuj względem daty publikacji
+(<code>published_date</code>) zaczynając od najstarszej daty". Więc jeżeli
+zbierzesz to wszystko razem te skromne dwie linie mówią: "pobierz
+z bazy danych wszystkie posty, których daty publikacji są wcześniejsze
+lub równe aktulanej dacie, oraz tak uzyskane posty posortuj według
+tejże daty publikacji rosnąco"</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">posts</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">published_date__lte</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">())</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;published_date&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <p>Ok. Interesujące posty znajdują się w <code>posts</code> więc teraz trzeba
+wygenerować (wyrenderować) naszą stronę, używając szablonu o nazwie
+<code>post_list.html</code>. I tak właśnie wygenerowaną stronę przesyłamy (<code>return</code>)
+do naszego użytkownika.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;blog/post_list.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;posts&#39;</span><span class="p">:</span> <span class="n">posts</span><span class="p">})</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      <p>Patrząc na nazwę tego widoku, jak sądzisz jakie jego jego zadanie?
+Naturalnie: "pokaż szczegółowe dane odnośnie konkretnego postu". Ale, skąd
+wiemy jakie konkretnie post pokazać? Pomoże nam w tym <code>pk</code>
+(ang. primary key), które kryje w sobie <em>unikatowy</em> numer, które jest
+przypisane do każdego postu w trakcie jego narodzin :-)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">post_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      <p>Mówimy w skrócie: "pobierz post of unikatowych numerze przechowywanych
+w zmiennej <code>pk</code>, a jeżeli takowy post nie istnieje wyświetl użytkownikowi
+wiadomość 404."
+FIXME: show some nice image about 404. (as a side comment)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">post</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Post</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      <p>Instrukcja ta wygląda niemal identycznie jak tak na końcu widoku
+<code>post_list</code>. Mówi ona: "Zwróć użytkownikowi stronę wygenerowaną z
+szablonu <code>post_detail.html</code> używając danych zawartych w zmiennej <code>post</code>."</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;blog/post_detail.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;post&#39;</span><span class="p">:</span> <span class="n">post</span><span class="p">})</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      <p>Widok ten obsługuje wszelkie prośby a propos utworzenia nowego postu.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">post_new</span><span class="p">(</span><span class="n">request</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-14'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      <p>jeżeli trafileś/trafiłaś tutaj to znaczy, że użytkownik kliknął <code>save</code></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&quot;POST&quot;</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-15'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-15'>#</a>
+      </div>
+      <p>weźmy dane które nam przesłał (znajdują się one w <code>request.POST</code>) oraz
+wrzucimy je do naszego formularza</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">form</span> <span class="o">=</span> <span class="n">PostForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-16'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-16'>#</a>
+      </div>
+      <p>formularz jest juz wypelnione wiec sprawdzmy czy wszystko jest jak
+nalezy (is_valid?)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-17'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-17'>#</a>
+      </div>
+      <p>ok wszystko jest super. Tworzymy obiekt <code>Post</code> ale jeszcze go
+nie zapisujemy do bazy danych,</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="n">post</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-18'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-18'>#</a>
+      </div>
+      <p>gdyż musimy dodać szybko autora.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="n">post</span><span class="o">.</span><span class="n">author</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-19'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-19'>#</a>
+      </div>
+      <p>gotowe wiec zapisujemy do bazy danych :-)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="n">post</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-20'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-20'>#</a>
+      </div>
+      <p>teraz przekierujemy naszego wiernego użytkownika
+(ang. <code>redirect</code>) do strony gdzie zobaczy efekt swojej pracy.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">&#39;blog.views.post_detail&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">post</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-21'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-21'>#</a>
+      </div>
+      <p>skoro tutaj trafiliśmy to znaczy to, że użytkownik nie wcisnął
+przycisku <code>save</code> ale po prostu nas poprosił o wyświetlenie strony
+z pustym formularzem, czy wiesz skąd ja to wiem?</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">PostForm</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-22'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-22'>#</a>
+      </div>
+      <p>Na tym etapie na formularz jest pusty więc wygenerujmy stronę na której
+go pokażemy.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;blog/post_edit.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-23'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-23'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-24'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-24'>#</a>
+      </div>
+      <p>Widok ten pomoże nam edytować już istniejący post.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">post_edit</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-25'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-25'>#</a>
+      </div>
+      <p>Zanim zaczniemy musimy pobrać post, który właśnie edytować chcemy.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">post</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Post</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-26'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-26'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">PostForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">post</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">post</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">post</span><span class="o">.</span><span class="n">author</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+            <span class="n">post</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">&#39;blog.views.post_detail&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">post</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">PostForm</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">post</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;blog/post_edit.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

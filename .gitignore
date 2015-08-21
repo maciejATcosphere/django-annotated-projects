@@ -1,0 +1,62 @@
+# todos here are enabled
+!.todos
+!.research
+
+*.py[cod]
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+coverage.xml
+cover
+pep8.txt
+sphinx-output
+
+# Translations
+*.mo
+
+# Default dev virtual environment
+.venv*
+
+# Settings overrides
+settings_local.py
+
+# build docs
+_build*
+
+# notebook
+.ipynb_checkpoints*
+
+# collected static files
+collectedstatic*
+
+# UI files
+bower_components*
+node_modules*
+.sass-cache*
+
+sounds*
+sessions*
+lessons*
+

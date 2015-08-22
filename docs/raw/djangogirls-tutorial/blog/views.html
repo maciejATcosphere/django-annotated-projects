@@ -383,21 +383,130 @@ go pokażemy.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-26'>#</a>
       </div>
+      <p>jeżeli dotarliśmy tutaj to znaczy, że nasz formularz ze zmianami
+został do nas przesłany, użytkownik wcisnął <code>save</code>.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&quot;POST&quot;</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-27'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-27'>#</a>
+      </div>
+      <p>stwórzmy formularz dla postów przekazując mu dane otrzymane od
+użytkownika oraz istniejący post (ten który właśnie zmieniamy).</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">form</span> <span class="o">=</span> <span class="n">PostForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">post</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-28'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-28'>#</a>
+      </div>
+      <p>sprawdźmy czy zmiany zaproponowanr przez użytkownika są poprawne.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-29'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-29'>#</a>
+      </div>
+      <p>utwórzmy zmienioną wersję naszego postu, ale jeszcze nie zapisujemy
+naszych zmian :-)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="n">post</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-30'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-30'>#</a>
+      </div>
+      <p>gdyż mogło się zdarzyć, iż osoba, która edytuje post jest kimś
+innym niż poprzedni autor.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="n">post</span><span class="o">.</span><span class="n">author</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-31'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-31'>#</a>
+      </div>
+      <p>wszystko gotowe więc zapisujemy. Po wykonaniu tej instrukcji
+post z nowymi danych został zapisany w bazie danych.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="n">post</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-32'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-32'>#</a>
+      </div>
+      <p>Post jest zapisany w bazie danych, ale to na razie wiemy tylko my.
+Przekierujemy użytkownika na stronę gdzie będzie mógł zobaczyć
+nowszą wersję postu.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">&#39;blog.views.post_detail&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">post</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-33'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-33'>#</a>
+      </div>
+      <p>jeżeli dostarliśmy tutaj, znaczy to, że użytkownik wyraził chęć
+wprowadzenia zmian do istniejącego postu. Załadujemy dane postu
+do formularza i zapiszmy wszystko w zmiennej o nazwie <code>form</code>.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">PostForm</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">post</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-34'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-34'>#</a>
+      </div>
+      <p>Sworzyliśmy formularz i załadowaliśmy do niego potrzebne dane, teraz
+już tylko musimy wygenerować finalną stronę, korzystamy z szablonu:
+<code>post_edit.html</code></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;blog/post_edit.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-35'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-35'>#</a>
+      </div>
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&quot;POST&quot;</span><span class="p">:</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">PostForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">post</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
-            <span class="n">post</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-            <span class="n">post</span><span class="o">.</span><span class="n">author</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
-            <span class="n">post</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">&#39;blog.views.post_detail&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">post</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">PostForm</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">post</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;blog/post_edit.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span>
-
-</pre></div>
+      <div class="highlight"><pre></pre></div>
     </div>
   </div>
   <div class='clearall'></div>

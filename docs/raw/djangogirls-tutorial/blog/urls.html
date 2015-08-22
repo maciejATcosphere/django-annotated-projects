@@ -18,20 +18,106 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-0'>#</a>
       </div>
-      
+      <h1>URLs czyli Uniform Resource Locator</h1>
+<p>Zanim zaczniemy, załóżmy że Twoja strona będzie zlokalizowana pod adresem:
+www.mojasuperdomena.org</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <p>Zanim zaczniemy rozpoznać wzorce adresów stron (ang. url -&gt;
+uniform resource locator) musimy zaimportować do aktulanego kontekstu
+potrzebne nam funkcjonalności.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <p>widoki będą nam też potrzebne, to one wykonują ciężką pracę.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
 
-<span class="n">urlpatterns</span><span class="o">=</span><span class="p">[</span>
-    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">post_list</span><span class="p">),</span>
-
-    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^post/(?P&lt;pk&gt;[0-9]+)/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">post_detail</span><span class="p">),</span>
-
-    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^post/new/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">post_new</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;post_new&#39;</span><span class="p">),</span>
-
-    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^post/(?P&lt;pk&gt;[0-9]+)/edit/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">post_edit</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;post_edit&#39;</span><span class="p">),</span>
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <p>to jest super prosty wzór. Dopasuje się on po prostu do naszej domeny,
+bez żadnych ekstra znaków. Więc jeżeli użytkownik wpisze
+www.mojasuperdomena.org, wówczas widok o nazwie <code>post_list</code> zostanie
+odpalony.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">post_list</span><span class="p">),</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <p>Dopasuje się do:</p>
+<ul>
+<li>www.mojasuperdomena.org/post/123/</li>
+<li>www.mojasuperdomena.org/post/0/</li>
+<li>www.mojasuperdomena.org/post/547857/</li>
+<li>itd.
+i odpala widok: <code>post_detail</code></li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^post/(?P&lt;pk&gt;[0-9]+)/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">post_detail</span><span class="p">),</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>dopasuje się do: www.mojasuperdomena.org/post/new/
+i odpala widok: <code>post_new</code></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^post/new/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">post_new</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;post_new&#39;</span><span class="p">),</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <p>dopasuje się do:</p>
+<ul>
+<li>www.mojasuperdomena.org/post/56/edit/</li>
+<li>www.mojasuperdomena.org/post/34/edit/</li>
+<li>www.mojasuperdomena.org/post/5748/edit/</li>
+<li>itd.
+i odpala widok <code>post_edit</code></li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^post/(?P&lt;pk&gt;[0-9]+)/edit/$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">post_edit</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;post_edit&#39;</span><span class="p">),</span>
 <span class="p">]</span>
 
 </pre></div>

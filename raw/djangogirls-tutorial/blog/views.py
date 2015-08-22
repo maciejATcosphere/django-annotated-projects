@@ -180,12 +180,59 @@ def post_edit(request, pk):
     """
 
     if request.method == "POST":
+        """
+        jeżeli dotarliśmy tutaj to znaczy, że nasz formularz ze zmianami
+        został do nas przesłany, użytkownik wcisnął `save`.
+
+        """
         form = PostForm(request.POST, instance=post)
+        """
+        stwórzmy formularz dla postów przekazując mu dane otrzymane od
+        użytkownika oraz istniejący post (ten który właśnie zmieniamy).
+
+        """
         if form.is_valid():
+            """
+            sprawdźmy czy zmiany zaproponowanr przez użytkownika są poprawne.
+
+            """
             post = form.save(commit=False)
+            """
+            utwórzmy zmienioną wersję naszego postu, ale jeszcze nie zapisujemy
+            naszych zmian :-)
+
+            """
             post.author = request.user
+            """
+            gdyż mogło się zdarzyć, iż osoba, która edytuje post jest kimś
+            innym niż poprzedni autor.
+
+            """
             post.save()
+            """
+            wszystko gotowe więc zapisujemy. Po wykonaniu tej instrukcji
+            post z nowymi danych został zapisany w bazie danych.
+
+            """
             return redirect('blog.views.post_detail', pk=post.pk)
+            """
+            Post jest zapisany w bazie danych, ale to na razie wiemy tylko my.
+            Przekierujemy użytkownika na stronę gdzie będzie mógł zobaczyć
+            nowszą wersję postu.
+
+            """
     else:
         form = PostForm(instance=post)
+        """
+        jeżeli dostarliśmy tutaj, znaczy to, że użytkownik wyraził chęć
+        wprowadzenia zmian do istniejącego postu. Załadujemy dane postu
+        do formularza i zapiszmy wszystko w zmiennej o nazwie `form`.
+
+        """
     return render(request, 'blog/post_edit.html', {'form': form})
+    """
+    Sworzyliśmy formularz i załadowaliśmy do niego potrzebne dane, teraz
+    już tylko musimy wygenerować finalną stronę, korzystamy z szablonu:
+    `post_edit.html`
+
+    """
